@@ -62,6 +62,12 @@ machine's `localhost:8080`.)
 
 ## 4. Use it
 
+**Check the connection** (non-interactive; exits 0 when connected, 1 otherwise):
+
+```bash
+python gl_check.py          # with GITLAB_ACCESS_TOKEN set, skips OAuth entirely
+```
+
 **Command line:**
 
 ```bash
@@ -123,6 +129,7 @@ glconnect/          package
   client.py         builds an authenticated gitlab.Gitlab client
   query.py          fetch() helper over the REST API (+ current_user())
 gl_login.py         one-time browser login + connectivity check
+gl_check.py         non-interactive "am I connected?" check (exit 0/1)
 gl_api.py           call the REST API from the CLI
 gl_app.py           optional Streamlit web UI
 ```

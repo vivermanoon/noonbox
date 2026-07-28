@@ -15,6 +15,7 @@ def get_client(
     *,
     access_token: str | None = None,
     open_browser: bool = True,
+    interactive: bool = True,
 ) -> gitlab.Gitlab:
     """Return a ``gitlab.Gitlab`` client for the configured instance.
 
@@ -25,6 +26,9 @@ def get_client(
 
     A supplied token (arg or env) may be an OAuth access token or a personal
     access token; set ``GITLAB_TOKEN_TYPE=private`` to use it as the latter.
+
+    Pass ``interactive=False`` to forbid the browser login fallback (step 3):
+    if no token is supplied and none is cached, a ``RuntimeError`` is raised.
     """
     url = url or config.GITLAB_URL
     token = access_token or os.environ.get("GITLAB_ACCESS_TOKEN")
@@ -35,5 +39,5 @@ def get_client(
             return gitlab.Gitlab(url, private_token=token, ssl_verify=config.SSL_VERIFY)
         return gitlab.Gitlab(url, oauth_token=token, ssl_verify=config.SSL_VERIFY)
 
-    tok = get_token(open_browser=open_browser)
+    tok = get_token(open_browser=open_browser, interactive=interactive)
     return gitlab.Gitlab(url, oauth_token=tok.access_token, ssl_verify=config.SSL_VERIFY)

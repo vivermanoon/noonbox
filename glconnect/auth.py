@@ -248,6 +248,7 @@ def get_token(
     scopes: list[str] | None = None,
     *,
     open_browser: bool = True,
+    interactive: bool = True,
 ) -> Token:
     """Return a valid user token, prompting a web login if needed.
 
@@ -258,6 +259,10 @@ def get_token(
 
     Set ``open_browser=False`` (or export ``GITLAB_NO_BROWSER=1``) on a
     headless machine to print a URL to open manually instead.
+
+    Set ``interactive=False`` to never launch the login flow: if steps 1-2
+    can't produce a valid token, a ``RuntimeError`` is raised instead. Useful
+    for health checks and non-interactive scripts.
     """
     token_path = token_path or config.TOKEN_PATH
     scopes = scopes or config.SCOPES
@@ -276,6 +281,11 @@ def get_token(
         token = None
 
     if token is None:
+        if not interactive:
+            raise RuntimeError(
+                "No valid cached token and interactive login is disabled. "
+                "Set GITLAB_ACCESS_TOKEN, or run `python gl_login.py` to log in."
+            )
         if not open_browser:
             os.environ["GITLAB_NO_BROWSER"] = "1"
         token = _run_login_flow(scopes)
