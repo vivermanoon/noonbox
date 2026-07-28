@@ -145,6 +145,7 @@ def _post_token(payload: dict) -> dict:
         data=payload,
         headers={"Accept": "application/json"},
         timeout=30,
+        verify=config.SSL_VERIFY,
     )
     if resp.status_code != 200:
         raise RuntimeError(

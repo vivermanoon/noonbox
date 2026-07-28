@@ -41,3 +41,30 @@ REDIRECT_URI = os.environ.get(
 # Space-separated OAuth scopes. "api" grants full read/write API access;
 # use "read_api" (or "read_user") to stay read-only.
 SCOPES = os.environ.get("GITLAB_SCOPES", "api").split()
+
+
+def _resolve_ssl_verify():
+    """TLS verification setting shared by the API client and OAuth requests.
+
+    Resolves to one of: a path to a CA bundle (str), True, or False — the
+    exact shape both python-gitlab's ``ssl_verify`` and requests' ``verify``
+    accept. For a self-hosted instance behind a private CA, point
+    ``GITLAB_CA_BUNDLE`` at the CA's PEM file.
+    """
+    ca_bundle = os.environ.get("GITLAB_CA_BUNDLE")
+    if ca_bundle:
+        return ca_bundle
+    raw = os.environ.get("GITLAB_SSL_VERIFY")
+    if raw is None:
+        return True
+    val = raw.strip()
+    if val.lower() in ("0", "false", "no", "off"):
+        return False
+    if val.lower() in ("1", "true", "yes", "on"):
+        return True
+    # Anything else is treated as a path to a CA bundle.
+    return val
+
+
+# True, False, or a path to a CA bundle (PEM). Default: verify with system CAs.
+SSL_VERIFY = _resolve_ssl_verify()

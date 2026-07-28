@@ -109,6 +109,8 @@ All optional except `GITLAB_CLIENT_ID`. Copy `.env.example` to `.env` to set the
 | `GITLAB_REDIRECT_PORT`  | `8080`                           | Local port that captures the OAuth callback    |
 | `GITLAB_REDIRECT_URI`   | `http://localhost:8080/callback` | Must match the app's registered redirect URI   |
 | `GITLAB_SCOPES`         | `api`                            | OAuth scopes (`api`, `read_api`, `read_user`)  |
+| `GITLAB_CA_BUNDLE`      | *(unset)*                        | PEM CA bundle for a private/internal CA        |
+| `GITLAB_SSL_VERIFY`     | `true`                           | `true`, `false`, or a CA bundle path           |
 | `GITLAB_ACCESS_TOKEN`   | *(unset)*                        | A token supplied out-of-band (skips login)     |
 | `GITLAB_TOKEN_TYPE`     | `oauth`                          | `oauth` or `private` for a personal token      |
 
@@ -132,3 +134,8 @@ gl_app.py           optional Streamlit web UI
 - User login means API calls run **as you**, with your GitLab permissions.
 - Prefer a read-only footprint? Register the app with the `read_api` scope and
   set `GITLAB_SCOPES=read_api`.
+- **Private CA:** `dp-gitlab.noon.team` serves a certificate signed by noon's
+  internal CA. If you hit `SSLError: certificate verify failed`, point
+  `GITLAB_CA_BUNDLE` at the CA's PEM file — it's applied to both the API client
+  and the OAuth token exchange. As a last resort, `GITLAB_SSL_VERIFY=false`
+  disables verification (not recommended).

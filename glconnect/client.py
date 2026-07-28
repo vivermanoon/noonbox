@@ -32,8 +32,8 @@ def get_client(
     if token:
         token = token.strip()
         if os.environ.get("GITLAB_TOKEN_TYPE", "oauth").lower() == "private":
-            return gitlab.Gitlab(url, private_token=token)
-        return gitlab.Gitlab(url, oauth_token=token)
+            return gitlab.Gitlab(url, private_token=token, ssl_verify=config.SSL_VERIFY)
+        return gitlab.Gitlab(url, oauth_token=token, ssl_verify=config.SSL_VERIFY)
 
     tok = get_token(open_browser=open_browser)
-    return gitlab.Gitlab(url, oauth_token=tok.access_token)
+    return gitlab.Gitlab(url, oauth_token=tok.access_token, ssl_verify=config.SSL_VERIFY)
