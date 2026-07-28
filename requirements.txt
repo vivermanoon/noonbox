@@ -1,0 +1,11 @@
+# BigQuery client + OAuth user-login (installed-app) flow
+google-cloud-bigquery>=3.25,<4
+google-auth-oauthlib>=1.2,<2
+google-auth>=2.30,<3
+
+# Optional: needed only if you call result.to_dataframe()
+db-dtypes>=1.2
+pandas>=2.0
+
+# Optional: the web UI (app.py). Install with `pip install streamlit`.
+# streamlit>=1.36
