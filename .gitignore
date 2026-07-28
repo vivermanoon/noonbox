@@ -2,6 +2,9 @@
 dashboard/rtl_inventory_dashboard.html
 dashboard/skus.json
 
+# Local preview copies (data snapshots for viewing, not part of the pipeline)
+dashboard/*.preview.html
+
 # Local table exports / scratch
 dashboard/rows.json
 dashboard/*.test.json
