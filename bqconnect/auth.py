@@ -16,6 +16,20 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from . import config
 
 
+def credentials_from_access_token(
+    access_token: str,
+    scopes: list[str] | None = None,
+) -> Credentials:
+    """Build credentials from a short-lived OAuth access token.
+
+    Handy when a token is supplied out-of-band, e.g. from
+    ``gcloud auth application-default print-access-token``. The token cannot
+    be refreshed, so it stops working when it expires (~1 hour); supply a
+    fresh one to continue.
+    """
+    return Credentials(token=access_token.strip(), scopes=scopes or config.SCOPES)
+
+
 def _load_cached(token_path: str, scopes: list[str]) -> Credentials | None:
     if not os.path.exists(token_path):
         return None
