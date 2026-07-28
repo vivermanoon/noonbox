@@ -1,0 +1,17 @@
+# Generated dashboard build (rebuild with dashboard/generate_dashboard.py)
+dashboard/rtl_inventory_dashboard.html
+dashboard/skus.json
+
+# Local table exports / scratch
+dashboard/rows.json
+dashboard/*.test.json
+rows.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS / editor
+.DS_Store

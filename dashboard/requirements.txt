@@ -1,0 +1,3 @@
+# Only needed for `generate_dashboard.py --source bq` (direct BigQuery query).
+# The `--source json` path (feeding an export from the bq CLI) has no dependencies.
+google-cloud-bigquery>=3.11
