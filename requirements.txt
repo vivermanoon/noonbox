@@ -7,5 +7,9 @@ google-auth>=2.30,<3
 db-dtypes>=1.2
 pandas>=2.0
 
-# Optional: the web UI (app.py). Install with `pip install streamlit`.
+# GitLab client + OAuth user-login (authorization-code + PKCE) flow
+python-gitlab>=4.4,<6
+requests>=2.31
+
+# Optional: the web UIs (app.py / gl_app.py). Install with `pip install streamlit`.
 # streamlit>=1.36

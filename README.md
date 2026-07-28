@@ -4,6 +4,9 @@ Connect to the BigQuery project **`noonbimerch`** using **user login (OAuth)** â
 you sign in with your own Google account through the browser; no service-account
 key files to manage. Works as a CLI or a small web app.
 
+> Looking for the **GitLab** connection? See [`GITLAB.md`](GITLAB.md) â€” same
+> OAuth-login shape, for `gitlab.com`.
+
 ## Prerequisites
 
 - Python 3.9+

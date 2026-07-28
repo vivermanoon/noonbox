@@ -4,6 +4,7 @@ client_secret.json
 *credentials*.json
 token.json
 .bq_token.json
+.gitlab_token.json
 *.pem
 *.key
 .env
