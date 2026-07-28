@@ -399,6 +399,9 @@ def main():
     ap.add_argument('--template', default=os.path.join(here, 'rtl_inventory_dashboard.template.html'))
     ap.add_argument('--out', default=os.path.join(here, 'rtl_inventory_dashboard.html'))
     ap.add_argument('--skus', default=os.path.join(here, 'skus.json'))
+    ap.add_argument('--standalone', action='store_true',
+                    help="Inline the SKU worklist into the HTML instead of writing skus.json — "
+                         "produces one self-contained file that opens over file:// with no web server.")
     args = ap.parse_args()
 
     if args.source == 'json':
@@ -413,21 +416,28 @@ def main():
 
     with open(args.template, 'r', encoding='utf-8') as fh:
         template = fh.read()
-    if '__DASHBOARD_DATA__' not in template:
-        raise SystemExit(f"Template {args.template} has no __DASHBOARD_DATA__ placeholder.")
-    # separators without spaces keep the embedded blob compact
+    for token in ('__DASHBOARD_DATA__', '__SKUS_DATA__'):
+        if token not in template:
+            raise SystemExit(f"Template {args.template} has no {token} placeholder.")
+    # separators without spaces keep the embedded blobs compact
     data_js = json.dumps(D, separators=(',', ':'), ensure_ascii=False)
-    html = template.replace('__DASHBOARD_DATA__', data_js)
+    # --standalone inlines the SKU payload; otherwise it stays null and the page
+    # lazily fetches skus.json (which we write alongside the HTML).
+    skus_js = json.dumps(skus, separators=(',', ':'), ensure_ascii=False) if args.standalone else 'null'
+    html = template.replace('__DASHBOARD_DATA__', data_js).replace('__SKUS_DATA__', skus_js)
     with open(args.out, 'w', encoding='utf-8') as fh:
         fh.write(html)
-    with open(args.skus, 'w', encoding='utf-8') as fh:
-        json.dump(skus, fh, separators=(',', ':'), ensure_ascii=False)
+    if not args.standalone:
+        with open(args.skus, 'w', encoding='utf-8') as fh:
+            json.dump(skus, fh, separators=(',', ':'), ensure_ascii=False)
 
     print(f"✓ {n_rows:,} table rows → "
           f"{len(D['tree']):,} tree groups, {len(D['base']):,} base groups, "
           f"{len(skus['rows']):,} SKU rows", file=sys.stderr)
-    print(f"✓ wrote {args.out}", file=sys.stderr)
-    print(f"✓ wrote {args.skus}", file=sys.stderr)
+    print(f"✓ wrote {args.out}" + (" (standalone — SKU data inlined)" if args.standalone
+                                    else ""), file=sys.stderr)
+    if not args.standalone:
+        print(f"✓ wrote {args.skus}", file=sys.stderr)
     print(f"  run_date = {D['run_date']}", file=sys.stderr)
 
 

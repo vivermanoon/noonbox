@@ -219,6 +219,7 @@ input[type=text]{background:var(--panel2);color:var(--txt);border:1px solid var(
 <div class="lb" id="lightbox" hidden><img id="lbimg" alt=""><div class="x">click anywhere to close</div></div>
 <script>
 const D=__DASHBOARD_DATA__, TD=D.treedims;
+const SKUS=__SKUS_DATA__;
 const CCOL={Electronics:'#4f8cff','Non-Electronics':'#22c55e',Grocery:'#f59e0b',Fashion:'#ec4899',rest:'#94a3b8'};
 const BORDER=['0-30','31-60','61-90','91-120','121-180','181-270','271-360','361-540','541-720','721+'];
 const $=s=>document.querySelector(s);
@@ -728,7 +729,7 @@ const critVT=makeVT({wrap:'#cwrap',head:'#chead',space:'#cspace',rows:'#crows',c
 function renderWork(){workVT.apply();}
 function renderCrit(){critVT.apply();}
 function skuLoad(){if(SKU.loaded||SKU.loading)return;SKU.loading=true;$('#wstatus').textContent='· loading SKU data & images…';$('#cstatus').textContent='· loading…';
-  fetch('skus.json').then(r=>{if(!r.ok)throw 0;return r.json();}).then(j=>{SKU.rows=j.rows;SKU.dims=j.dims;SKU.base=j.base;SKU.iurl=j.iurl||'';SKU.loaded=true;SKU.loading=false;computeCrit();
+  ((typeof SKUS!=='undefined'&&SKUS&&SKUS.rows)?Promise.resolve(SKUS):fetch('skus.json').then(r=>{if(!r.ok)throw 0;return r.json();})).then(j=>{SKU.rows=j.rows;SKU.dims=j.dims;SKU.base=j.base;SKU.iurl=j.iurl||'';SKU.loaded=true;SKU.loading=false;computeCrit();
     $('#wact').innerHTML='<option value="">All actions</option>'+j.dims.action.map(a=>`<option>${a}</option>`).join('');
     $('#cact').innerHTML='<option value="">All diagnoses</option>'+SKU.cats.map(a=>`<option>${a}</option>`).join('');
     const dealOpts=(j.dims.deal_tier||[]).filter(x=>x).sort((a,b)=>b.localeCompare(a)).map(a=>`<option>${a}</option>`).join('');
