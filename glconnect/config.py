@@ -18,8 +18,9 @@ if _ENV_FILE.exists():
         _key, _, _val = _line.partition("=")
         os.environ.setdefault(_key.strip(), _val.strip())
 
-# GitLab instance to connect to (SaaS by default; set to your self-hosted URL).
-GITLAB_URL = os.environ.get("GITLAB_URL", "https://gitlab.com").rstrip("/")
+# GitLab instance to connect to (defaults to noon's self-hosted instance;
+# override via GITLAB_URL for gitlab.com or another host).
+GITLAB_URL = os.environ.get("GITLAB_URL", "https://dp-gitlab.noon.team").rstrip("/")
 
 # OAuth application credentials, created under GitLab -> Settings ->
 # Applications. CLIENT_SECRET is optional: leave it unset for a

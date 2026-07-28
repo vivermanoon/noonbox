@@ -5,7 +5,7 @@ you sign in with your own Google account through the browser; no service-account
 key files to manage. Works as a CLI or a small web app.
 
 > Looking for the **GitLab** connection? See [`GITLAB.md`](GITLAB.md) — same
-> OAuth-login shape, for `gitlab.com`.
+> OAuth-login shape, for `dp-gitlab.noon.team`.
 
 ## Prerequisites
 

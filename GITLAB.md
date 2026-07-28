@@ -1,14 +1,19 @@
-# GitLab connection (`gitlab.com`)
+# GitLab connection (`dp-gitlab.noon.team`)
 
-Connect to **GitLab** using **user login (OAuth)** — you sign in with your own
-GitLab account through the browser; no long-lived tokens to paste around. Works
-as a CLI or a small web app, mirroring the BigQuery setup in
-[`README.md`](README.md).
+Connect to noon's **GitLab** (`https://dp-gitlab.noon.team`) using **user login
+(OAuth)** — you sign in with your own GitLab account through the browser; no
+long-lived tokens to paste around. Works as a CLI or a small web app, mirroring
+the BigQuery setup in [`README.md`](README.md).
+
+> The instance is on noon's internal network, so run everything below from a
+> machine that can reach `dp-gitlab.noon.team` (e.g. on the VPN / office
+> network). Point `GITLAB_URL` at `https://gitlab.com` if you want the SaaS.
 
 ## Prerequisites
 
 - Python 3.9+
-- A GitLab account on the instance you're connecting to (default: `gitlab.com`)
+- A GitLab account on the instance you're connecting to
+  (default: `dp-gitlab.noon.team`)
 - An **OAuth application** (one-time setup, see below)
 
 ## 1. Install
@@ -23,7 +28,7 @@ pip install -r requirements.txt
 User login needs an OAuth application registered on your GitLab account:
 
 1. Go to **GitLab → Settings → Applications → Add new application**
-   (`https://gitlab.com/-/user_settings/applications`).
+   (`https://dp-gitlab.noon.team/-/user_settings/applications`).
 2. **Name**: anything, e.g. `noonbox`.
 3. **Redirect URI**: `http://localhost:8080/callback`
    (must match `GITLAB_REDIRECT_URI` exactly).
@@ -78,7 +83,7 @@ streamlit run gl_app.py
 ```python
 from glconnect import get_client, fetch, current_user
 
-gl = get_client()                 # instance defaults to gitlab.com
+gl = get_client()                 # instance defaults to dp-gitlab.noon.team
 me = current_user(client=gl)
 print(me["username"])
 
@@ -97,7 +102,7 @@ All optional except `GITLAB_CLIENT_ID`. Copy `.env.example` to `.env` to set the
 
 | Variable                | Default                          | Purpose                                        |
 | ----------------------- | -------------------------------- | ---------------------------------------------- |
-| `GITLAB_URL`            | `https://gitlab.com`             | Instance to connect to                         |
+| `GITLAB_URL`            | `https://dp-gitlab.noon.team`    | Instance to connect to                         |
 | `GITLAB_CLIENT_ID`      | *(required)*                     | OAuth application ID                            |
 | `GITLAB_CLIENT_SECRET`  | *(unset)*                        | Only for a confidential OAuth app              |
 | `GITLAB_TOKEN_PATH`     | `.gitlab_token.json`             | Where the cached token is stored               |
